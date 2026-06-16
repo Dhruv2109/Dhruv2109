@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dhruv Jasoliya — Process Automation &amp; IT Support</title>
+<meta name="description" content="Dhruv Jasoliya — Process automation and IT support professional building enterprise-grade workflow solutions with Power Automate, Power BI, and SharePoint." />
+
+<!-- Google Fonts: Syne (expressive display) + Space Grotesk (geometric sans) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+<style>
+/* ============================================================
+   THEME / TOKENS
+   ============================================================ */
+:root{
+  --accent: #8b5cf6;          /* electric violet */
+  --accent-2: #b388ff;
+  --accent-rgb: 139, 92, 246;
+  --bg: #07070a;
+  --bg-2: #0d0d12;
+  --panel: rgba(255,255,255,0.022);
+  --panel-line: rgba(255,255,255,0.07);
+  --text: #ece9f2;
+  --muted: #9a96a8;
+  --faint: #6b6878;
+  --maxw: 1180px;
+  --ease: cubic-bezier(.16,.84,.36,1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Space Grotesk", system-ui, sans-serif;
+  font-weight:400;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* layered depth: gradient mesh + grain. Never flat. */
+body::before{
+  content:"";
+  position:fixed; inset:0; z-index:-3;
+  background:
+    radial-gradient(60% 55% at 18% 8%, rgba(var(--accent-rgb),0.20), transparent 60%),
+    radial-gradient(50% 50% at 88% 22%, rgba(120,80,255,0.14), transparent 62%),
+    radial-gradient(60% 60% at 50% 105%, rgba(var(--accent-rgb),0.13), transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 55%, var(--bg) 100%);
+  transition:background .6s var(--ease);
+}
+/* subtle grain texture */
+body::after{
+  content:"";
+  position:fixed; inset:0; z-index:-2; pointer-events:none;
+  opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection{ background:rgba(var(--accent-rgb),0.32); color:#fff; }
+
+a{ color:inherit; text-decoration:none; }
+img{ max-width:100%; display:block; }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.wrap{ width:min(var(--maxw), 92vw); margin-inline:auto; }
+section{ padding:clamp(70px, 11vw, 140px) 0; position:relative; }
+
+.eyebrow{
+  display:inline-flex; align-items:center; gap:.6em;
+  font-size:.74rem; letter-spacing:.32em; text-transform:uppercase;
+  color:var(--accent-2); font-weight:500; margin:0 0 1.1rem;
+}
+.eyebrow::before{
+  content:""; width:30px; height:1px;
+  background:linear-gradient(90deg, var(--accent), transparent);
+}
+.sec-title{
+  font-family:"Syne", sans-serif; font-weight:800;
+  font-size:clamp(2rem, 5.2vw, 3.6rem);
+  line-height:1.02; letter-spacing:-.02em; margin:0 0 .4rem;
+}
+.sec-sub{ color:var(--muted); max-width:54ch; margin:0 0 3rem; font-size:1.02rem; }
+
+/* ============================================================
+   SCROLL PROGRESS — horizontal (top) + vertical (right edge)
+   ============================================================ */
+.progress-x{
+  position:fixed; top:0; left:0; height:3px; width:100%;
+  z-index:120; pointer-events:none; background:transparent;
+}
+.progress-x__fill{
+  height:100%; width:0%;
+  background:linear-gradient(90deg, var(--accent), var(--accent-2));
+  box-shadow:0 0 12px rgba(var(--accent-rgb),0.8);
+  position:relative;
+}
+.progress-x__fill::after{
+  content:""; position:absolute; right:-3px; top:50%; transform:translateY(-50%);
+  width:9px; height:9px; border-radius:50%;
+  background:#fff; box-shadow:0 0 12px 2px var(--accent-2);
+}
+.progress-y{
+  position:fixed; top:0; right:0; width:3px; height:100%;
+  z-index:120; pointer-events:none; background:transparent;
+}
+.progress-y__fill{
+  width:100%; height:0%;
+  background:linear-gradient(180deg, var(--accent), var(--accent-2));
+  box-shadow:0 0 12px rgba(var(--accent-rgb),0.8);
+  position:relative;
+}
+.progress-y__fill::after{
+  content:""; position:absolute; bottom:-3px; left:50%; transform:translateX(-50%);
+  width:9px; height:9px; border-radius:50%;
+  background:#fff; box-shadow:0 0 12px 2px var(--accent-2);
+}
+@media (max-width:760px){ .progress-y{ display:none; } }
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px clamp(20px,4vw,46px);
+  backdrop-filter:blur(11px);
+  background:linear-gradient(180deg, rgba(7,7,10,0.7), rgba(7,7,10,0));
+  transition:background .3s;
+}
+.logo{
+  font-family:"Syne",sans-serif; font-weight:800; font-size:1.15rem;
+  letter-spacing:-.01em; cursor:pointer; user-select:none;
+  display:inline-flex; align-items:center; gap:.55em;
+}
+.logo .mark{
+  width:30px; height:30px; border-radius:9px;
+  display:grid; place-items:center; font-size:.82rem;
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#0a0a0d; box-shadow:0 0 18px rgba(var(--accent-rgb),0.55);
+  transition:transform .4s var(--ease);
+}
+.logo:hover .mark{ transform:rotate(-8deg) scale(1.06); }
+.nav-links{ display:flex; gap:6px; align-items:center; }
+.nav-links a{
+  position:relative; font-size:.86rem; color:var(--muted);
+  padding:8px 14px; border-radius:9px; transition:color .25s;
+}
+.nav-links a::after{
+  content:""; position:absolute; left:14px; right:14px; bottom:4px; height:1.5px;
+  background:var(--accent); transform:scaleX(0); transform-origin:left;
+  transition:transform .3s var(--ease);
+}
+.nav-links a:hover{ color:var(--text); }
+.nav-links a.active{ color:var(--text); }
+.nav-links a.active::after{ transform:scaleX(1); }
+@media (max-width:820px){ .nav-links{ display:none; } }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{ min-height:100svh; display:flex; align-items:center; padding-top:90px; overflow:hidden; }
+#hero-canvas{
+  position:absolute; inset:0; width:100%; height:100%;
+  z-index:0; opacity:.9;
+}
+.hero .wrap{ position:relative; z-index:2; }
+.hero-grid{
+  display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center;
+}
+@media (max-width:820px){ .hero-grid{ grid-template-columns:1fr; } }
+
+.hero-avail{
+  display:inline-flex; align-items:center; gap:.6em;
+  font-size:.78rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--muted); padding:7px 14px; border-radius:100px;
+  border:1px solid var(--panel-line); background:var(--panel);
+  margin-bottom:1.6rem;
+}
+.hero-avail .dot{
+  width:8px; height:8px; border-radius:50%; background:#3ddc84;
+  box-shadow:0 0 10px #3ddc84; animation:pulse 2s infinite;
+}
+@keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+
+.hero h1{
+  font-family:"Syne",sans-serif; font-weight:800;
+  font-size:clamp(3.2rem, 12vw, 9rem);
+  line-height:.92; letter-spacing:-.035em; margin:0;
+}
+.hero h1 .l1{ display:block; color:var(--text); }
+.hero h1 .l2{
+  display:block;
+  background:linear-gradient(100deg, var(--accent-2), var(--accent) 60%, #d9c9ff);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero-title{
+  font-size:clamp(1rem,2.4vw,1.45rem); color:var(--text); font-weight:500;
+  margin:1.7rem 0 .4rem; letter-spacing:.005em;
+}
+.hero-title .scramble{ color:var(--accent-2); font-weight:600; }
+.hero-prop{ color:var(--muted); max-width:46ch; font-size:1.05rem; margin:0 0 2.2rem; }
+
+.cta-row{ display:flex; flex-wrap:wrap; gap:14px; }
+.btn{
+  position:relative; display:inline-flex; align-items:center; gap:.6em;
+  padding:14px 26px; border-radius:13px; font-weight:500; font-size:.95rem;
+  cursor:pointer; border:1px solid transparent; transition:transform .2s var(--ease), box-shadow .3s, background .3s;
+  will-change:transform;
+}
+.btn-primary{
+  background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#0a0a0d; font-weight:600;
+  box-shadow:0 8px 30px rgba(var(--accent-rgb),0.35);
+}
+.btn-primary:hover{ box-shadow:0 10px 40px rgba(var(--accent-rgb),0.55); }
+.btn-ghost{
+  background:var(--panel); border-color:var(--panel-line); color:var(--text);
+}
+.btn-ghost:hover{ border-color:rgba(var(--accent-rgb),0.6); background:rgba(var(--accent-rgb),0.07); }
+
+/* avatar */
+.avatar{
+  width:clamp(120px,16vw,168px); aspect-ratio:1; border-radius:50%;
+  display:grid; place-items:center; justify-self:center;
+  font-family:"Syne",sans-serif; font-weight:800;
+  font-size:clamp(2.4rem,4vw,3.4rem); letter-spacing:-.02em;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 32% 28%, rgba(var(--accent-rgb),0.5), transparent 60%),
+    linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+  border:1px solid var(--panel-line);
+  box-shadow:inset 0 0 40px rgba(var(--accent-rgb),0.15), 0 20px 60px rgba(0,0,0,0.5);
+  position:relative;
+}
+.avatar::after{
+  content:""; position:absolute; inset:-2px; border-radius:50%;
+  background:conic-gradient(from 0deg, transparent, var(--accent), transparent 55%);
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+  mask:radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+  animation:spin 7s linear infinite; opacity:.8;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+@media (max-width:820px){ .avatar{ display:none; } }
+
+.scroll-hint{
+  position:absolute; bottom:26px; left:50%; transform:translateX(-50%);
+  font-size:.72rem; letter-spacing:.28em; text-transform:uppercase; color:var(--faint);
+  display:flex; flex-direction:column; align-items:center; gap:8px; z-index:2;
+}
+.scroll-hint i{ animation:bob 1.8s ease-in-out infinite; }
+@keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(6px); } }
+@media (max-width:820px){ .scroll-hint{ display:none; } }
+
+/* ============================================================
+   BENTO (About + Skills)
+   ============================================================ */
+.bento{
+  display:grid; gap:16px;
+  grid-template-columns:repeat(4, 1fr);
+  grid-auto-rows:minmax(120px, auto);
+}
+.cell{
+  position:relative; overflow:hidden;
+  background:var(--panel); border:1px solid var(--panel-line);
+  border-radius:20px; padding:26px;
+  transition:transform .25s var(--ease), border-color .35s;
+  transform-style:preserve-3d; will-change:transform;
+}
+.cell::before{ /* cursor-following glow */
+  content:""; position:absolute; inset:0; opacity:0; transition:opacity .4s;
+  background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(var(--accent-rgb),0.16), transparent 60%);
+  pointer-events:none;
+}
+.cell:hover{ border-color:rgba(var(--accent-rgb),0.35); }
+.cell:hover::before{ opacity:1; }
+.cell > *{ position:relative; transform:translateZ(22px); }
+
+.cell-bio{ grid-column:span 2; grid-row:span 2; }
+.cell-bio p{ color:var(--muted); font-size:1.04rem; margin:.2rem 0 0; }
+.cell-bio p strong{ color:var(--text); font-weight:500; }
+.cell-bio .lead{ color:var(--text); font-size:1.18rem; line-height:1.5; }
+
+.stat{ display:flex; flex-direction:column; justify-content:center; }
+.stat .num{
+  font-family:"Syne",sans-serif; font-weight:800;
+  font-size:clamp(2.1rem,4vw,2.9rem); line-height:1; letter-spacing:-.02em;
+  background:linear-gradient(135deg, #fff, var(--accent-2));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.stat .label{ color:var(--muted); font-size:.86rem; margin-top:.55rem; }
+.stat .suffix{ -webkit-text-fill-color:var(--accent-2); }
+
+.span2{ grid-column:span 2; }
+@media (max-width:880px){
+  .bento{ grid-template-columns:repeat(2,1fr); }
+  .cell-bio{ grid-column:span 2; grid-row:auto; }
+  .span2{ grid-column:span 2; }
+}
+@media (max-width:520px){
+  .bento{ grid-template-columns:1fr; }
+  .cell-bio,.span2{ grid-column:auto; }
+}
+
+/* skills bento */
+.skill-cell h3{
+  font-family:"Syne",sans-serif; font-weight:700; font-size:1.04rem;
+  margin:0 0 1rem; display:flex; align-items:center; gap:.6em;
+}
+.skill-cell h3 i{ color:var(--accent-2); font-size:.95rem; }
+.tags{ display:flex; flex-wrap:wrap; gap:8px; }
+.tag{
+  font-size:.8rem; padding:6px 12px; border-radius:9px;
+  background:rgba(var(--accent-rgb),0.07); border:1px solid rgba(var(--accent-rgb),0.16);
+  color:var(--text); transition:background .25s, border-color .25s, transform .2s;
+}
+.tag:hover{ background:rgba(var(--accent-rgb),0.16); border-color:rgba(var(--accent-rgb),0.4); transform:translateY(-2px); }
+
+/* ============================================================
+   MARQUEE
+   ============================================================ */
+.marquee{
+  border-block:1px solid var(--panel-line);
+  background:rgba(var(--accent-rgb),0.03);
+  padding:22px 0; overflow:hidden; white-space:nowrap;
+  -webkit-mask:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee__track{
+  display:inline-flex; gap:44px; align-items:center;
+  animation:marquee 32s linear infinite; will-change:transform;
+}
+.marquee:hover .marquee__track{ animation-play-state:paused; }
+.marquee span{
+  font-family:"Syne",sans-serif; font-weight:700; font-size:clamp(1.1rem,2.4vw,1.7rem);
+  color:var(--faint); letter-spacing:.01em; display:inline-flex; align-items:center; gap:44px;
+}
+.marquee span::after{ content:"\2022"; color:var(--accent); font-size:.7em; }
+@keyframes marquee{ to{ transform:translateX(-50%); } }
+
+/* ============================================================
+   PROJECTS
+   ============================================================ */
+.proj-grid{
+  display:grid; gap:18px;
+  grid-template-columns:repeat(auto-fill, minmax(330px,1fr));
+}
+.proj{
+  position:relative; overflow:hidden;
+  background:var(--panel); border:1px solid var(--panel-line);
+  border-radius:20px; padding:28px;
+  transition:transform .25s var(--ease), border-color .35s;
+  transform-style:preserve-3d; will-change:transform;
+  display:flex; flex-direction:column; min-height:260px;
+}
+.proj::before{
+  content:""; position:absolute; inset:0; opacity:0; transition:opacity .4s; pointer-events:none;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%), rgba(var(--accent-rgb),0.15), transparent 60%);
+}
+.proj:hover{ border-color:rgba(var(--accent-rgb),0.35); }
+.proj:hover::before{ opacity:1; }
+.proj > *{ position:relative; transform:translateZ(20px); }
+.proj .idx{
+  font-family:"Syne",sans-serif; font-weight:800; font-size:1rem;
+  color:var(--accent-2); letter-spacing:.05em; margin-bottom:1.1rem;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.proj .idx i{ color:var(--faint); font-size:1.1rem; transition:color .3s, transform .3s; }
+.proj:hover .idx i{ color:var(--accent-2); transform:translate(3px,-3px); }
+.proj h3{
+  font-family:"Syne",sans-serif; font-weight:700; font-size:1.32rem;
+  line-height:1.12; margin:0 0 .7rem; letter-spacing:-.01em;
+}
+.proj p{ color:var(--muted); font-size:.95rem; margin:0 0 1.4rem; flex:1; }
+.proj .tags{ margin-top:auto; }
+
+/* ============================================================
+   EXPERIENCE TIMELINE
+   ============================================================ */
+.timeline{ position:relative; margin-left:6px; }
+.timeline::before{
+  content:""; position:absolute; left:0; top:6px; bottom:6px; width:2px;
+  background:linear-gradient(180deg, var(--accent), rgba(var(--accent-rgb),0.08));
+}
+.tl-item{ position:relative; padding:0 0 46px 38px; }
+.tl-item:last-child{ padding-bottom:0; }
+.tl-item::before{
+  content:""; position:absolute; left:-6px; top:5px; width:14px; height:14px; border-radius:50%;
+  background:var(--bg); border:2px solid var(--accent);
+  box-shadow:0 0 0 4px rgba(var(--accent-rgb),0.12), 0 0 14px rgba(var(--accent-rgb),0.6);
+}
+.tl-head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.4rem 1rem; margin-bottom:.2rem; }
+.tl-role{ font-family:"Syne",sans-serif; font-weight:700; font-size:1.22rem; letter-spacing:-.01em; }
+.tl-date{
+  font-size:.78rem; color:var(--accent-2); letter-spacing:.06em;
+  padding:3px 11px; border-radius:100px; border:1px solid rgba(var(--accent-rgb),0.22);
+  background:rgba(var(--accent-rgb),0.06); white-space:nowrap;
+}
+.tl-co{ color:var(--muted); font-size:.96rem; margin-bottom:1rem; }
+.tl-co i{ color:var(--accent-2); margin-right:.4em; font-size:.85em; }
+.tl-bullets{ list-style:none; margin:0; padding:0; display:grid; gap:.7rem; }
+.tl-bullets li{ position:relative; padding-left:1.5rem; color:var(--muted); font-size:.95rem; }
+.tl-bullets li::before{
+  content:"\f0da"; font-family:"Font Awesome 6 Free"; font-weight:900;
+  position:absolute; left:0; top:1px; color:var(--accent); font-size:.8em;
+}
+
+/* ============================================================
+   EDUCATION + CERTS
+   ============================================================ */
+.two-col{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+@media (max-width:760px){ .two-col{ grid-template-columns:1fr; } }
+.panel{
+  background:var(--panel); border:1px solid var(--panel-line);
+  border-radius:20px; padding:30px;
+}
+.panel h3{
+  font-family:"Syne",sans-serif; font-weight:700; font-size:1.05rem; margin:0 0 1.4rem;
+  display:flex; align-items:center; gap:.6em; color:var(--text);
+}
+.panel h3 i{ color:var(--accent-2); }
+.edu-item{ padding:0 0 18px; border-bottom:1px solid var(--panel-line); margin-bottom:18px; }
+.edu-item:last-child{ border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.edu-item .deg{ font-weight:500; color:var(--text); font-size:1.06rem; }
+.edu-item .school{ color:var(--muted); font-size:.92rem; margin-top:.25rem; }
+.edu-item .when{ color:var(--accent-2); font-size:.8rem; margin-top:.35rem; letter-spacing:.04em; }
+.cert-list{ list-style:none; margin:0; padding:0; display:grid; gap:12px; }
+.cert-list li{ display:flex; align-items:center; gap:.8em; color:var(--text); font-size:.98rem; }
+.cert-list li i{ color:var(--accent-2); width:18px; text-align:center; }
+.cert-list li .badge{
+  margin-left:auto; font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--accent-2); padding:2px 9px; border-radius:100px;
+  border:1px solid rgba(var(--accent-rgb),0.3); background:rgba(var(--accent-rgb),0.07);
+}
+
+/* ============================================================
+   CLOSER
+   ============================================================ */
+.closer{ text-align:center; position:relative; }
+.closer::before{
+  content:""; position:absolute; left:50%; top:40%; transform:translate(-50%,-50%);
+  width:min(700px,80vw); aspect-ratio:1; z-index:-1;
+  background:radial-gradient(circle, rgba(var(--accent-rgb),0.22), transparent 62%);
+  filter:blur(20px);
+}
+.closer h2{
+  font-family:"Syne",sans-serif; font-weight:800;
+  font-size:clamp(2.4rem,7vw,5rem); line-height:1; letter-spacing:-.03em; margin:0 0 1.4rem;
+}
+.closer h2 em{
+  font-style:normal;
+  background:linear-gradient(100deg, var(--accent-2), var(--accent));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.closer p{ color:var(--muted); max-width:48ch; margin:0 auto 2.4rem; font-size:1.08rem; }
+.contact-row{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; }
+.contact-link{
+  display:inline-flex; align-items:center; gap:.7em;
+  padding:13px 22px; border-radius:13px; font-size:.95rem;
+  background:var(--panel); border:1px solid var(--panel-line); color:var(--text);
+  transition:border-color .25s, background .25s, transform .2s var(--ease);
+}
+.contact-link i{ color:var(--accent-2); }
+.contact-link:hover{ border-color:rgba(var(--accent-rgb),0.5); background:rgba(var(--accent-rgb),0.08); transform:translateY(-2px); }
+
+footer{
+  text-align:center; padding:46px 0 60px; color:var(--faint); font-size:.82rem;
+  border-top:1px solid var(--panel-line);
+}
+footer .hint{ opacity:.6; font-size:.76rem; margin-top:.6rem; }
+footer .hint i{ color:var(--accent-2); }
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+.cursor-dot, .cursor-ring{
+  position:fixed; top:0; left:0; border-radius:50%; pointer-events:none; z-index:9999;
+  transform:translate(-50%,-50%); mix-blend-mode:difference;
+}
+.cursor-dot{ width:7px; height:7px; background:#fff; }
+.cursor-ring{
+  width:34px; height:34px; border:1.5px solid #fff;
+  transition:width .25s var(--ease), height .25s var(--ease), background .25s, border-color .25s;
+}
+.cursor-ring.hover{ width:58px; height:58px; background:rgba(255,255,255,0.12); border-color:transparent; }
+body.touch .cursor-dot, body.touch .cursor-ring{ display:none; }
+@media (hover:none){ .cursor-dot,.cursor-ring{ display:none; } }
+body.has-cursor, body.has-cursor *{ cursor:none; }
+
+/* theme toast */
+.toast{
+  position:fixed; left:50%; bottom:34px; transform:translate(-50%, 24px);
+  background:rgba(20,18,28,0.92); border:1px solid rgba(var(--accent-rgb),0.4);
+  color:var(--text); padding:11px 20px; border-radius:100px; font-size:.86rem;
+  letter-spacing:.04em; z-index:9000; opacity:0; pointer-events:none;
+  transition:opacity .35s, transform .35s var(--ease);
+  box-shadow:0 10px 40px rgba(0,0,0,0.5), 0 0 26px rgba(var(--accent-rgb),0.35);
+  backdrop-filter:blur(8px);
+}
+.toast.show{ opacity:1; transform:translate(-50%, 0); }
+.toast i{ color:var(--accent-2); margin-right:.5em; }
+
+/* ============================================================
+   REVEAL ANIMATIONS
+   ============================================================ */
+.reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+.reveal.in{ opacity:1; transform:none; }
+.reveal.d1{ transition-delay:.08s; }
+.reveal.d2{ transition-delay:.16s; }
+.reveal.d3{ transition-delay:.24s; }
+.reveal.d4{ transition-delay:.32s; }
+
+/* staggered hero load */
+.fade-up{ opacity:0; transform:translateY(26px); animation:fadeUp .9s var(--ease) forwards; }
+.fade-up.s1{ animation-delay:.1s; }
+.fade-up.s2{ animation-delay:.25s; }
+.fade-up.s3{ animation-delay:.4s; }
+.fade-up.s4{ animation-delay:.55s; }
+.fade-up.s5{ animation-delay:.7s; }
+.fade-up.s6{ animation-delay:.85s; }
+@keyframes fadeUp{ to{ opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+
+<!-- scroll progress -->
+<div class="progress-x"><div class="progress-x__fill" id="px"></div></div>
+<div class="progress-y"><div class="progress-y__fill" id="py"></div></div>
+
+<!-- custom cursor -->
+<div class="cursor-ring" id="ring"></div>
+<div class="cursor-dot" id="dot"></div>
+
+<!-- theme toast -->
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="logo" id="logo" title="Click me">
+    <span class="mark">DJ</span><span>Dhruv Jasoliya</span>
+  </div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#education">Education</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <canvas id="hero-canvas"></canvas>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-avail fade-up s1"><span class="dot"></span> Open to IT &amp; Automation roles</div>
+        <h1>
+          <span class="l1 fade-up s2">Dhruv</span>
+          <span class="l2 fade-up s3">Jasoliya</span>
+        </h1>
+        <p class="hero-title fade-up s4">Process Automation &amp; <span class="scramble" data-final="IT Support">IT Support</span></p>
+        <p class="hero-prop fade-up s5">I turn manual paperwork into automated, audit-ready systems — built with Power Automate, Power BI, and SharePoint, and running on the production floor today.</p>
+        <div class="cta-row fade-up s6">
+          <a href="#projects" class="btn btn-primary magnetic"><i class="fa-solid fa-bolt"></i> View my work</a>
+          <a href="#contact" class="btn btn-ghost magnetic"><i class="fa-regular fa-envelope"></i> Get in touch</a>
+        </div>
+      </div>
+      <div class="avatar fade-up s4" aria-label="Dhruv Jasoliya">DJ</div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll <i class="fa-solid fa-arrow-down"></i></div>
+</header>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <p class="eyebrow reveal">About</p>
+    <h2 class="sec-title reveal d1">Builder of quiet,<br/>reliable systems</h2>
+    <p class="sec-sub reveal d2">The kind of automation people stop noticing because it just works.</p>
+
+    <div class="bento">
+      <div class="cell cell-bio tilt reveal d1">
+        <p class="lead">I'm a process automation and IT support professional with 18 months of hands-on experience building enterprise-grade workflow solutions and supporting users in live production environments.</p>
+        <p>At <strong>Mircom Group of Companies</strong>, I independently designed and deployed five end-to-end automation systems with Power Automate, Power BI, SharePoint, and Microsoft Forms — eliminating manual paperwork, reducing downtime, and creating audit-ready records still used on the manufacturing floor today.</p>
+      </div>
+
+      <div class="cell stat tilt reveal d2">
+        <span class="num"><span class="count" data-to="18">0</span></span>
+        <span class="label">Months of hands-on experience</span>
+      </div>
+      <div class="cell stat tilt reveal d3">
+        <span class="num"><span class="count" data-to="5">0</span></span>
+        <span class="label">Automation systems shipped</span>
+      </div>
+      <div class="cell stat tilt reveal d2">
+        <span class="num"><span class="count" data-to="50">0</span><span class="suffix">+</span></span>
+        <span class="label">IT incidents triaged daily</span>
+      </div>
+      <div class="cell stat tilt reveal d3">
+        <span class="num"><span class="count" data-to="100">0</span><span class="suffix">%</span></span>
+        <span class="label">SLA compliance over 8 months</span>
+      </div>
+      <div class="cell stat tilt span2 reveal d4">
+        <span class="num"><span class="count" data-to="200">0</span><span class="suffix">+</span></span>
+        <span class="label">Lab devices managed with zero audit discrepancies</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Power Automate</span><span>Power BI</span><span>SharePoint</span><span>ServiceNow</span><span>Active Directory</span><span>Azure AD</span><span>Office 365</span><span>Power Query</span><span>Microsoft Forms</span><span>Dynamics D365</span><span>Windows Server</span><span>JIRA</span>
+    <span>Power Automate</span><span>Power BI</span><span>SharePoint</span><span>ServiceNow</span><span>Active Directory</span><span>Azure AD</span><span>Office 365</span><span>Power Query</span><span>Microsoft Forms</span><span>Dynamics D365</span><span>Windows Server</span><span>JIRA</span>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="wrap">
+    <p class="eyebrow reveal">Capabilities</p>
+    <h2 class="sec-title reveal d1">What I work with</h2>
+    <p class="sec-sub reveal d2">Grouped by where I spend my time — from designing flows to keeping users unblocked.</p>
+
+    <div class="bento">
+      <div class="cell skill-cell span2 tilt reveal d1">
+        <h3><i class="fa-solid fa-diagram-project"></i> Process Automation &amp; Workflow Design</h3>
+        <div class="tags">
+          <span class="tag">Power Automate</span><span class="tag">End-to-end flows</span><span class="tag">Approvals &amp; triggers</span><span class="tag">Microsoft Forms</span><span class="tag">SharePoint Lists</span><span class="tag">Automated PDF generation</span><span class="tag">QR code integration</span><span class="tag">Teams notifications</span>
+        </div>
+      </div>
+      <div class="cell skill-cell span2 tilt reveal d2">
+        <h3><i class="fa-solid fa-chart-line"></i> Data &amp; Reporting</h3>
+        <div class="tags">
+          <span class="tag">Power BI</span><span class="tag">Power Query</span><span class="tag">KPI tracking</span><span class="tag">SharePoint data logging</span><span class="tag">Excel-to-SharePoint sync</span><span class="tag">Efficiency visualization</span>
+        </div>
+      </div>
+      <div class="cell skill-cell span2 tilt reveal d1">
+        <h3><i class="fa-solid fa-headset"></i> IT Service Desk &amp; Support</h3>
+        <div class="tags">
+          <span class="tag">L1 / L2 / L3 triage</span><span class="tag">ServiceNow</span><span class="tag">SLA compliance</span><span class="tag">Hardware troubleshooting</span><span class="tag">Laptop imaging</span><span class="tag">Deployment</span>
+        </div>
+      </div>
+      <div class="cell skill-cell span2 tilt reveal d2">
+        <h3><i class="fa-solid fa-server"></i> Systems Administration</h3>
+        <div class="tags">
+          <span class="tag">Active Directory</span><span class="tag">Azure AD</span><span class="tag">Office 365</span><span class="tag">Provisioning</span><span class="tag">Windows 10/11</span><span class="tag">Windows Server</span>
+        </div>
+      </div>
+      <div class="cell skill-cell span2 tilt reveal d1">
+        <h3><i class="fa-solid fa-file-lines"></i> Documentation &amp; Standardization</h3>
+        <div class="tags">
+          <span class="tag">SOP authoring</span><span class="tag">Training matrix</span><span class="tag">Version control</span><span class="tag">Audit-ready records</span><span class="tag">Onboarding docs</span>
+        </div>
+      </div>
+      <div class="cell skill-cell span2 tilt reveal d2">
+        <h3><i class="fa-solid fa-toolbox"></i> Tools &amp; Platforms</h3>
+        <div class="tags">
+          <span class="tag">Microsoft 365</span><span class="tag">Dynamics AX / D365</span><span class="tag">JIRA</span><span class="tag">Google Forms</span><span class="tag">HTML / CSS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <p class="eyebrow reveal">Selected Work</p>
+    <h2 class="sec-title reveal d1">Systems I designed<br/>and shipped</h2>
+    <p class="sec-sub reveal d2">Built independently at Mircom Group of Companies — each one removed manual steps and left an audit trail behind.</p>
+
+    <div class="proj-grid">
+      <article class="proj tilt reveal d1">
+        <div class="idx">01 <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+        <h3>Quality Control Record System</h3>
+        <p>A technician form submission auto-generates a professional PDF checklist — dynamic checkmarks, firmware versions, technician name, and a unique QR code — then archives it in SharePoint and prints a physical record placed in every customer's product box.</p>
+        <div class="tags"><span class="tag">Microsoft Forms</span><span class="tag">Power Automate</span><span class="tag">SharePoint</span><span class="tag">PDF + QR</span></div>
+      </article>
+
+      <article class="proj tilt reveal d2">
+        <div class="idx">02 <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+        <h3>Production Floor Ticketing System</h3>
+        <p>Floor workers report station issues via a form; tickets log into a live SharePoint dashboard with a custom duration timer and push @mentioned urgency alerts to managers in Teams. The timer freezes on resolution — a closed-loop audit trail across the floor.</p>
+        <div class="tags"><span class="tag">Power Automate</span><span class="tag">SharePoint</span><span class="tag">Microsoft Teams</span><span class="tag">Live dashboard</span></div>
+      </article>
+
+      <article class="proj tilt reveal d3">
+        <div class="idx">03 <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+        <h3>Employee Training Certification System</h3>
+        <p>Captures training submissions, routes dual digital approvals (Trainer + Supervisor) through Teams approval cards, auto-generates signed PDF certificates, files records into structured SharePoint folders, logs to a central training matrix, and emails employees — zero manual intervention.</p>
+        <div class="tags"><span class="tag">Google Forms</span><span class="tag">Power Automate</span><span class="tag">SharePoint</span><span class="tag">Teams Approvals</span></div>
+      </article>
+
+      <article class="proj tilt reveal d1">
+        <div class="idx">04 <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+        <h3>Production Efficiency Dashboard</h3>
+        <p>A Power BI dashboard connected to SharePoint with Power Query transforms and custom logic that adjusts hourly targets for shifts, breaks, and wrap-up. Management compares actual vs. target hour-by-hour and filters to specific workstations to find bottlenecks in real time.</p>
+        <div class="tags"><span class="tag">Power BI</span><span class="tag">Power Query</span><span class="tag">SharePoint</span><span class="tag">Business logic</span></div>
+      </article>
+
+      <article class="proj tilt reveal d2">
+        <div class="idx">05 <i class="fa-solid fa-arrow-up-right-from-square"></i></div>
+        <h3>ERP Process Standardization</h3>
+        <p>Authored and maintained 15+ SOPs for ERP data entry and system processes used directly for staff training and onboarding, and delivered weekly status reports with full change traceability back to the implementation team.</p>
+        <div class="tags"><span class="tag">Dynamics D365</span><span class="tag">SOP authoring</span><span class="tag">Change tracking</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="wrap">
+    <p class="eyebrow reveal">Career</p>
+    <h2 class="sec-title reveal d1">Experience</h2>
+    <p class="sec-sub reveal d2">Three roles across automation, lab support, and application support.</p>
+
+    <div class="timeline">
+      <div class="tl-item reveal d1">
+        <div class="tl-head">
+          <span class="tl-role">D365 Data Cleanup — Intern</span>
+          <span class="tl-date">Feb 2026 – Present</span>
+        </div>
+        <div class="tl-co"><i class="fa-solid fa-location-dot"></i>Mircom Group of Companies · Vaughan, ON</div>
+        <ul class="tl-bullets">
+          <li>Independently designed and deployed five end-to-end automation systems with Power Automate, Power BI, SharePoint, and Microsoft Forms — eliminating manual paperwork and creating audit-ready compliance records used on the floor today.</li>
+          <li>Built a Power BI efficiency dashboard with Power Query logic that adjusts hourly targets for shifts and breaks, letting management spot bottlenecks by workstation in real time.</li>
+          <li>Authored and maintained 15+ SOPs for ERP data entry used for staff training, and delivered weekly status reports with full change traceability to the implementation team.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item reveal d2">
+        <div class="tl-head">
+          <span class="tl-role">Lab Technology Support Specialist — Co-op</span>
+          <span class="tl-date">Jan 2025 – Aug 2025</span>
+        </div>
+        <div class="tl-co"><i class="fa-solid fa-location-dot"></i>George Brown College · Toronto, ON</div>
+        <ul class="tl-bullets">
+          <li>Triaged and resolved 50+ end-user IT incidents daily via ServiceNow — hardware, software, network, and peripherals — maintaining 100% SLA compliance across an 8-month term.</li>
+          <li>Built, imaged, and deployed Windows machines for 30+ new users per semester, and administered Active Directory accounts with role-based access and workstation provisioning.</li>
+          <li>Maintained inventory for 200+ lab devices with zero discrepancies across quarterly audits, and documented procedures into a knowledge base that reduced repeat escalations.</li>
+        </ul>
+      </div>
+
+      <div class="tl-item reveal d3">
+        <div class="tl-head">
+          <span class="tl-role">Application Support Representative — Intern</span>
+          <span class="tl-date">Jul 2022 – Dec 2022</span>
+        </div>
+        <div class="tl-co"><i class="fa-solid fa-location-dot"></i>Ecreate Infotech · Surat, India</div>
+        <ul class="tl-bullets">
+          <li>Logged, tracked, and resolved 200+ application support tickets with complete incident documentation, resolution notes, and closure summaries for every case.</li>
+          <li>Coordinated cross-functional incident escalation with zero missed follow-ups, closing every issue within agreed service timelines through clear written communication.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION + CERTS -->
+<section id="education">
+  <div class="wrap">
+    <p class="eyebrow reveal">Foundations</p>
+    <h2 class="sec-title reveal d1">Education &amp; Certifications</h2>
+    <p class="sec-sub reveal d2">Formal training, plus the certifications keeping it current.</p>
+
+    <div class="two-col">
+      <div class="panel reveal d1">
+        <h3><i class="fa-solid fa-graduation-cap"></i> Education</h3>
+        <div class="edu-item">
+          <div class="deg">Advanced Diploma in Computer Engineering Technology</div>
+          <div class="school">Seneca Polytechnic · Toronto, ON</div>
+          <div class="when">May 2023 – Dec 2025</div>
+        </div>
+      </div>
+
+      <div class="panel reveal d2">
+        <h3><i class="fa-solid fa-certificate"></i> Certifications</h3>
+        <ul class="cert-list">
+          <li><i class="fa-solid fa-screwdriver-wrench"></i> CompTIA A+ <span class="badge">In Progress</span></li>
+          <li><i class="fa-solid fa-network-wired"></i> Cisco CCNA</li>
+          <li><i class="fa-brands fa-microsoft"></i> Microsoft Azure Fundamentals</li>
+          <li><i class="fa-brands fa-aws"></i> AWS Cloud Foundations</li>
+          <li><i class="fa-brands fa-redhat"></i> Red Hat Linux</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSER -->
+<section id="contact" class="closer">
+  <div class="wrap">
+    <p class="eyebrow reveal" style="justify-content:center;">Let's talk</p>
+    <h2 class="reveal d1">Got a process worth<br/><em>automating?</em></h2>
+    <p class="reveal d2">I'm open to IT support and process automation roles. If you've got manual workflows slowing your team down, I'd love to hear about them.</p>
+    <div class="contact-row reveal d3">
+      <a href="mailto:djas9898@gmail.com" class="contact-link magnetic"><i class="fa-solid fa-envelope"></i> djas9898@gmail.com</a>
+      <a href="tel:+14375995924" class="contact-link magnetic"><i class="fa-solid fa-phone"></i> 437-599-5924</a>
+      <a href="https://www.linkedin.com/in/dhruv-jasoliya/" target="_blank" rel="noopener" class="contact-link magnetic"><i class="fa-brands fa-linkedin-in"></i> LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>Dhruv Jasoliya · North York, ON · Designed &amp; built from scratch</div>
+    <div class="hint"><i class="fa-solid fa-wand-magic-sparkles"></i> Psst — click my name up top to change the mood.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var isTouch = window.matchMedia('(hover:none)').matches || 'ontouchstart' in window;
+  if(isTouch) document.body.classList.add('touch');
+
+  /* ---------- SCROLL PROGRESS ---------- */
+  var px = document.getElementById('px'), py = document.getElementById('py');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max > 0 ? (h.scrollTop / max) : 0;
+    px.style.width = (p*100)+'%';
+    py.style.height = (p*100)+'%';
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* ---------- NAV ACTIVE HIGHLIGHT ---------- */
+  var sections = ['about','skills','projects','experience','education','contact'];
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+  var navObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        navLinks.forEach(function(a){
+          a.classList.toggle('active', a.getAttribute('href') === '#'+e.target.id);
+        });
+      }
+    });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  sections.forEach(function(id){ var el=document.getElementById(id); if(el) navObs.observe(el); });
+
+  /* ---------- REVEAL ON SCROLL ---------- */
+  var revObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); revObs.unobserve(e.target); }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ revObs.observe(el); });
+
+  /* ---------- COUNT-UP STATS ---------- */
+  function animateCount(el){
+    var to = parseInt(el.getAttribute('data-to'),10);
+    var dur = 1500, start = null;
+    function step(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts-start)/dur, 1);
+      var eased = 1 - Math.pow(1-p, 3);
+      el.textContent = Math.round(eased*to);
+      if(p<1) requestAnimationFrame(step);
+      else el.textContent = to;
+    }
+    requestAnimationFrame(step);
+  }
+  var countObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ animateCount(e.target); countObs.unobserve(e.target); }
+    });
+  }, {threshold:0.6});
+  document.querySelectorAll('.count').forEach(function(el){ countObs.observe(el); });
+
+  /* ---------- HERO WORD SCRAMBLE ---------- */
+  (function(){
+    var el = document.querySelector('.scramble');
+    if(!el) return;
+    var finalText = el.getAttribute('data-final');
+    var chars = '!<>-_\\/[]{}=+*^?#________';
+    var frame = 0, queue = [], resolveDone;
+    function setText(newText){
+      var old = el.textContent, len = Math.max(old.length, newText.length);
+      queue = [];
+      for(var i=0;i<len;i++){
+        var from = old[i] || '';
+        var to = newText[i] || '';
+        var startF = Math.floor(Math.random()*30);
+        var endF = startF + Math.floor(Math.random()*30);
+        queue.push({from:from,to:to,start:startF,end:endF,char:null});
+      }
+      frame = 0; update();
+    }
+    function rnd(a){ return a[Math.floor(Math.random()*a.length)]; }
+    function update(){
+      var out = '', complete = 0;
+      for(var i=0;i<queue.length;i++){
+        var q = queue[i];
+        if(frame >= q.end){ complete++; out += q.to; }
+        else if(frame >= q.start){
+          if(!q.char || Math.random()<0.28){ q.char = rnd(chars); }
+          out += '<span style="color:var(--accent)">'+q.char+'</span>';
+        } else { out += q.from; }
+      }
+      el.innerHTML = out;
+      if(complete !== queue.length){ frame++; requestAnimationFrame(update); }
+      else { el.textContent = finalText; }
+    }
+    setTimeout(function(){ setText(finalText); }, 1100);
+  })();
+
+  /* ---------- CUSTOM CURSOR ---------- */
+  if(!isTouch){
+    document.body.classList.add('has-cursor');
+    var dot = document.getElementById('dot'), ring = document.getElementById('ring');
+    var mx=window.innerWidth/2, my=window.innerHeight/2, rx=mx, ry=my;
+    window.addEventListener('mousemove', function(e){
+      mx=e.clientX; my=e.clientY;
+      dot.style.transform = 'translate('+mx+'px,'+my+'px) translate(-50%,-50%)';
+    });
+    function ringLoop(){
+      rx += (mx-rx)*0.18; ry += (my-ry)*0.18;
+      ring.style.transform = 'translate('+rx+'px,'+ry+'px) translate(-50%,-50%)';
+      requestAnimationFrame(ringLoop);
+    }
+    ringLoop();
+    document.querySelectorAll('a,button,.btn,.logo,.cell,.proj,.tag,.contact-link').forEach(function(el){
+      el.addEventListener('mouseenter', function(){ ring.classList.add('hover'); });
+      el.addEventListener('mouseleave', function(){ ring.classList.remove('hover'); });
+    });
+  }
+
+  /* ---------- CURSOR-GLOW position for cells/projects ---------- */
+  document.querySelectorAll('.cell, .proj').forEach(function(el){
+    el.addEventListener('mousemove', function(e){
+      var r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (e.clientX-r.left)+'px');
+      el.style.setProperty('--my', (e.clientY-r.top)+'px');
+    });
+  });
+
+  /* ---------- 3D TILT (desktop) ---------- */
+  if(!isTouch){
+    document.querySelectorAll('.tilt, .proj').forEach(function(el){
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        var cx = (e.clientX - r.left)/r.width - 0.5;
+        var cy = (e.clientY - r.top)/r.height - 0.5;
+        el.style.transform = 'perspective(900px) rotateY('+(cx*6)+'deg) rotateX('+(-cy*6)+'deg) translateY(-3px)';
+      });
+      el.addEventListener('mouseleave', function(){ el.style.transform=''; });
+    });
+  }
+
+  /* ---------- MAGNETIC BUTTONS (desktop) ---------- */
+  if(!isTouch){
+    document.querySelectorAll('.magnetic').forEach(function(el){
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        var x = e.clientX - (r.left + r.width/2);
+        var y = e.clientY - (r.top + r.height/2);
+        el.style.transform = 'translate('+(x*0.28)+'px,'+(y*0.4)+'px)';
+      });
+      el.addEventListener('mouseleave', function(){ el.style.transform=''; });
+    });
+  }
+
+  /* ---------- HERO CANVAS: mouse-reactive abstract motion ---------- */
+  (function(){
+    var canvas = document.getElementById('hero-canvas');
+    if(!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var w,h,dpr,particles=[],mouse={x:-999,y:-999};
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function accent(){
+      var c = getComputedStyle(document.documentElement).getPropertyValue('--accent-rgb').trim();
+      return c || '139,92,246';
+    }
+    function resize(){
+      dpr = Math.min(window.devicePixelRatio||1, 2);
+      w = canvas.clientWidth; h = canvas.clientHeight;
+      canvas.width = w*dpr; canvas.height = h*dpr;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    function init(){
+      resize();
+      var count = Math.min(70, Math.floor(w*h/16000));
+      particles = [];
+      for(var i=0;i<count;i++){
+        particles.push({
+          x:Math.random()*w, y:Math.random()*h,
+          vx:(Math.random()-0.5)*0.35, vy:(Math.random()-0.5)*0.35,
+          r:Math.random()*1.8+0.6
+        });
+      }
+    }
+    var heroEl = document.querySelector('.hero');
+    heroEl.addEventListener('mousemove', function(e){
+      var r = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+    });
+    heroEl.addEventListener('mouseleave', function(){ mouse.x=-999; mouse.y=-999; });
+
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      var a = accent();
+      for(var i=0;i<particles.length;i++){
+        var p = particles[i];
+        // mouse repulsion
+        var dx = p.x-mouse.x, dy = p.y-mouse.y, d2 = dx*dx+dy*dy;
+        if(d2 < 18000){
+          var f = (18000-d2)/18000;
+          var d = Math.sqrt(d2)||1;
+          p.vx += (dx/d)*f*0.5; p.vy += (dy/d)*f*0.5;
+        }
+        p.x += p.vx; p.y += p.vy;
+        p.vx *= 0.96; p.vy *= 0.96;
+        // gentle drift floor
+        p.vx += (Math.random()-0.5)*0.02; p.vy += (Math.random()-0.5)*0.02;
+        if(p.x<0||p.x>w) p.vx*=-1; if(p.y<0||p.y>h) p.vy*=-1;
+        p.x=Math.max(0,Math.min(w,p.x)); p.y=Math.max(0,Math.min(h,p.y));
+      }
+      // connections
+      for(var i=0;i<particles.length;i++){
+        for(var j=i+1;j<particles.length;j++){
+          var pa=particles[i], pb=particles[j];
+          var dx=pa.x-pb.x, dy=pa.y-pb.y, dist=Math.sqrt(dx*dx+dy*dy);
+          if(dist<120){
+            ctx.strokeStyle='rgba('+a+','+(0.13*(1-dist/120))+')';
+            ctx.lineWidth=0.7;
+            ctx.beginPath(); ctx.moveTo(pa.x,pa.y); ctx.lineTo(pb.x,pb.y); ctx.stroke();
+          }
+        }
+      }
+      for(var i=0;i<particles.length;i++){
+        var p=particles[i];
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle='rgba('+a+',0.7)'; ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize', function(){ resize(); init(); });
+    init();
+    if(!reduce) draw();
+    else { // static frame
+      var a=accent();
+      for(var i=0;i<particles.length;i++){ var p=particles[i];
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba('+a+',0.6)'; ctx.fill(); }
+    }
+  })();
+
+  /* ---------- EASTER EGG: logo cycles accent themes ---------- */
+  (function(){
+    var themes = [
+      {name:'Electric Violet', accent:'#8b5cf6', a2:'#b388ff', rgb:'139, 92, 246'},
+      {name:'Cyber Cyan',      accent:'#22d3ee', a2:'#67e8f9', rgb:'34, 211, 238'},
+      {name:'Acid Lime',       accent:'#a3e635', a2:'#bef264', rgb:'163, 230, 53'},
+      {name:'Hot Magenta',     accent:'#ec4899', a2:'#f9a8d4', rgb:'236, 72, 153'},
+      {name:'Solar Amber',     accent:'#f59e0b', a2:'#fcd34d', rgb:'245, 158, 11'},
+      {name:'Ember Red',       accent:'#f43f5e', a2:'#fb7185', rgb:'244, 63, 94'}
+    ];
+    var idx = 0;
+    var logo = document.getElementById('logo');
+    var toast = document.getElementById('toast');
+    var toastTimer;
+    logo.addEventListener('click', function(){
+      idx = (idx+1) % themes.length;
+      var t = themes[idx];
+      var root = document.documentElement;
+      root.style.setProperty('--accent', t.accent);
+      root.style.setProperty('--accent-2', t.a2);
+      root.style.setProperty('--accent-rgb', t.rgb);
+      toast.innerHTML = '<i class="fa-solid fa-palette"></i> '+t.name;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 1600);
+    });
+  })();
+
+})();
+</script>
+</body>
+</html>
